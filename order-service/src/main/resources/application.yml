@@ -1,0 +1,33 @@
+server:
+  port: 8091
+spring:
+  application:
+    name: order-service
+
+# =====================================================================
+# BAI 5: RETRY PATTERN voi Exponential Backoff cho loi TAM THOI (timeout)
+# =====================================================================
+resilience4j:
+  retry:
+    instances:
+      ghtkClient:
+        maxAttempts: 3               # 3 lan goi (1 lan dau + 2 lan retry)
+        waitDuration: 2s             # moi lan cach nhau 2 giay
+        enableExponentialBackoff: false   # muon backoff tang dan thi bat true
+        exponentialBackoffMultiplier: 2
+        retryExceptions:
+          - java.util.concurrent.TimeoutException    # ★ chi retry loi TAM THOI
+          - java.net.SocketTimeoutException
+          - java.net.ConnectException
+        # ignoreExceptions: loi nghiep vu KHONG retry
+        ignoreExceptions:
+          - com.storex.order.exception.WaybillRejectedException
+logging:
+  level:
+    com.storex.order: DEBUG
+    io.github.resilience4j: INFO
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,retries

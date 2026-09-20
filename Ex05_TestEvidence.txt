@@ -1,0 +1,21 @@
+=== KET QUA CHAY TEST - Session12 / Bai 5 ===
+Test class: GhtkRetryTest   |   tests=4  failures=0  errors=0
+
+--- 1) Cau hinh Retry duoc nap dung ---
+>>> [CONFIG] maxAttempts=3 | (waitDuration=2s, retryExceptions=TimeoutException)
+
+--- 2) TRANSIENT FAILURE: 2 lan timeout dau, lan 3 thanh cong ---
+>>> [TRANSIENT] Ket qua=WAYBILL-ORD-100 | so lan goi GHTK=3 | thoi gian=4049ms (2 lan cho x 2s)
+    => Retry hoat dong: goi lai tu dong 2 lan, moi lan cach 2 giay, cuoi cung THANH CONG.
+
+--- 3) LOI NGHIEP VU: khong retry vo ich ---
+>>> [BUSINESS ERROR] Ket qua=GHTP-FAILED:ORD-200 (WaybillRejectedException) | so lan goi GHTK=1
+    => Chi goi 1 lan. Loi nghiep vu (ma don khong hop le) khong the sua bang cach goi lai.
+
+--- 4) HET LUOT RETRY: tra ve fallback, khong nem exception ra ngoai ---
+>>> [HET LUOT] Ket qua=GHTP-FAILED:ORD-300 (TimeoutException) | so lan goi GHTK=3
+    => Timeout lien tuc -> thu 3 lan roi tra fallback cho nguoi dung.
+
+KET LUAN:
+  - Retry + backoff 2s xu ly tot loi TAM THOI (mang chop nhay).
+  - Khong retry loi nghiep vu; het luot thi fallback de khong lam sap Order-Service.
