@@ -37,3 +37,4 @@ cd order-service
 
 > `maxAttempts: 3` = 1 lần gọi đầu + 2 lần retry (Resilience4j đếm cả lần đầu).
 > Muốn đúng 3 lần **retry** thì đặt `maxAttempts: 4`.
+a
